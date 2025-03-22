@@ -1,21 +1,14 @@
 import React, { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
-import "./App.css";
+import "./styles.css";
 
-function Markdown() {
+const MarkdownEditor = () => {
   const [markdown, setMarkdown] = useState("");
   const [loading, setLoading] = useState(true);
 
-  const handleChange = (e) => {
-    setMarkdown(e.target.value);
-  };
-
-  const changeLoadingVar = () => {
-    setLoading(false);
-  };
-
   useEffect(() => {
-    setTimeout(changeLoadingVar, 3000);
+    const timer = setTimeout(() => setLoading(false), 3000);
+    return () => clearTimeout(timer);
   }, []);
 
   if (loading) {
@@ -28,10 +21,21 @@ function Markdown() {
 
   return (
     <div className="app">
-      <textarea className="textarea" onChange={handleChange} />
-      <ReactMarkdown className="preview">{markdown}</ReactMarkdown>
+      <div className="editor-container">
+        <textarea
+          className="textarea"
+          value={markdown}
+          onChange={(e) => setMarkdown(e.target.value)}
+          placeholder="Enter Markdown here..."
+        />
+      </div>
+      <div className="preview-container">
+        <div className="preview">
+          <ReactMarkdown>{markdown}</ReactMarkdown>
+        </div>
+      </div>
     </div>
   );
-}
+};
 
-export default Markdown;
+export default MarkdownEditor;
